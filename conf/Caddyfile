@@ -1,0 +1,40 @@
+{
+    log {
+        level INFO
+        format console
+    }
+    email {$EMAIL}
+}
+
+(ts_host) {
+    @blocked not remote_ip 100.64.0.0/10 127.0.0.1/32
+
+    tls {
+        resolvers 1.1.1.1 8.8.8.8 # need this to get around the tailscale/nextdns dns overwrite
+        dns cloudflare {$CF_DNS_API_TOKEN}
+    }
+
+    respond @blocked "Unauthorized" 403
+}
+
+dockhand.{$DOMAIN} {
+    import ts_host
+    reverse_proxy dockhand:3000
+}
+
+{$DOMAIN} {
+    import ts_host
+    root * /etc/caddy/site
+    templates
+    file_server
+}
+
+dev.resume.{$DOMAIN} {
+    import ts_host
+    reverse_proxy project-resume-dev:8080
+}
+
+prod.resume.{$DOMAIN} {
+    import ts_host
+    reverse_proxy project-resume-prod:8080
+}
