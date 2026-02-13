@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="860" viewBox="0 0 1400 860" role="img" aria-labelledby="title desc">
+  <title id="title">Private Ingress Engine Architecture</title>
+  <desc id="desc">Diagram showing public internet access denied and tailnet access allowed to Caddy and private services.</desc>
+
+  <defs>
+    <style>
+      .bg { fill: #f8fafc; }
+      .title { font: 700 34px "Segoe UI", Arial, sans-serif; fill: #0f172a; }
+      .subtitle { font: 500 18px "Segoe UI", Arial, sans-serif; fill: #334155; }
+      .box { fill: #ffffff; stroke: #0f172a; stroke-width: 2.5; rx: 16; ry: 16; }
+      .box-soft { fill: #f8fafc; stroke: #475569; stroke-width: 2; rx: 14; ry: 14; }
+      .zone { fill: #dbe4f0; stroke: #64748b; stroke-width: 2; stroke-dasharray: 8 8; rx: 20; ry: 20; }
+      .label { font: 600 20px "Segoe UI", Arial, sans-serif; fill: #0f172a; }
+      .small { font: 500 16px "Segoe UI", Arial, sans-serif; fill: #334155; }
+      .svc { font: 600 17px "Segoe UI", Arial, sans-serif; fill: #0f172a; }
+      .ok { fill: #065f46; font: 700 16px "Segoe UI", Arial, sans-serif; }
+      .deny { fill: #991b1b; font: 700 16px "Segoe UI", Arial, sans-serif; }
+      .note { font: 600 15px "Segoe UI", Arial, sans-serif; fill: #1e293b; }
+    </style>
+
+    <marker id="arrowDark" markerWidth="14" markerHeight="10" refX="12" refY="5" orient="auto">
+      <polygon points="0,0 14,5 0,10" fill="#1e293b" />
+    </marker>
+    <marker id="arrowGreen" markerWidth="14" markerHeight="10" refX="12" refY="5" orient="auto">
+      <polygon points="0,0 14,5 0,10" fill="#047857" />
+    </marker>
+    <marker id="arrowRed" markerWidth="14" markerHeight="10" refX="12" refY="5" orient="auto">
+      <polygon points="0,0 14,5 0,10" fill="#b91c1c" />
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1400" height="860" />
+
+  <text class="title" x="60" y="70">Private Ingress Engine (Tailnet-Only Access)</text>
+  <text class="subtitle" x="60" y="105">Public traffic denied, tailnet traffic allowed to private services</text>
+
+  <rect class="zone" x="570" y="150" width="810" height="640" />
+  <text class="label" x="600" y="186">Private Tailnet + Docker Host</text>
+
+  <rect class="box" x="70" y="250" width="330" height="140" />
+  <text class="label" x="95" y="300">Tailnet Client</text>
+  <text class="small" x="95" y="332">Connected via Tailscale</text>
+  <text class="small" x="95" y="358">100.64.0.0/10 source IP</text>
+
+  <rect class="box" x="70" y="450" width="330" height="140" />
+  <text class="label" x="95" y="500">Public Internet Client</text>
+  <text class="small" x="95" y="532">Not on tailnet</text>
+  <text class="small" x="95" y="558">Phone LTE / random user</text>
+
+  <rect class="box" x="610" y="250" width="290" height="300" />
+  <text class="label" x="640" y="298">Caddy Ingress</text>
+  <text class="small" x="640" y="328">TLS + DNS-01</text>
+  <text class="small" x="640" y="355">Access policy:</text>
+  <text class="small" x="640" y="380">Allow 100.64.0.0/10 + localhost</text>
+  <text class="small" x="640" y="405">Else return 403 Unauthorized</text>
+
+  <rect class="box-soft" x="980" y="250" width="360" height="120" />
+  <text class="svc" x="1010" y="298">Dockhand</text>
+  <text class="small" x="1010" y="326">reverse_proxy dockhand:3000</text>
+
+  <rect class="box-soft" x="980" y="405" width="360" height="120" />
+  <text class="svc" x="1010" y="453">Resume (Dev)</text>
+  <text class="small" x="1010" y="481">reverse_proxy project-resume-dev:8080</text>
+
+  <rect class="box-soft" x="980" y="560" width="360" height="120" />
+  <text class="svc" x="1010" y="608">Resume (Prod)</text>
+  <text class="small" x="1010" y="636">reverse_proxy project-resume-prod:8080</text>
+
+  <rect class="box-soft" x="610" y="600" width="290" height="110" />
+  <text class="svc" x="640" y="644">Tailscale Sidecar</text>
+  <text class="small" x="640" y="672">Shared namespace with Caddy</text>
+
+  <line x1="400" y1="320" x2="610" y2="320" stroke="#047857" stroke-width="4" marker-end="url(#arrowGreen)" />
+  <text class="ok" x="410" y="286">ALLOW</text>
+  <text class="small" x="410" y="310">Tailnet source IP</text>
+
+  <line x1="400" y1="520" x2="610" y2="520" stroke="#b91c1c" stroke-width="4" marker-end="url(#arrowRed)" />
+  <text class="deny" x="410" y="486">DENY</text>
+  <text class="small" x="410" y="510">Non-tailnet request</text>
+  <text class="deny" x="486" y="554" text-anchor="middle">DNS resolve failure</text>
+  <text class="deny" x="486" y="574" text-anchor="middle">403 Unauthorized</text>
+
+  <line x1="900" y1="420" x2="980" y2="310" stroke="#1e293b" stroke-width="2.5" marker-end="url(#arrowDark)" />
+  <line x1="900" y1="455" x2="980" y2="465" stroke="#1e293b" stroke-width="2.5" marker-end="url(#arrowDark)" />
+  <line x1="900" y1="500" x2="980" y2="620" stroke="#1e293b" stroke-width="2.5" marker-end="url(#arrowDark)" />
+
+  <line x1="755" y1="550" x2="755" y2="600" stroke="#1e293b" stroke-width="2.5" marker-end="url(#arrowDark)" />
+
+</svg>

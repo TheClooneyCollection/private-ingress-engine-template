@@ -1,5 +1,7 @@
 # Private Ingress Engine
 
+![Private Ingress Engine Architecture](docs/private-ingress-architecture.svg)
+
 Completely Private, self-hosted Ingress Engine for running & exposing services on a tailnet, with custom domains and subdomains, i.e. `service.{DOMAIN}`.
 
 This stack combines:
