@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Private Cloud</title>
+    <meta name="description" content="Private Cloud entry point." />
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #0f172a;
+        --bg-2: #111827;
+        --card: #111827;
+        --text: #e5e7eb;
+        --muted: #94a3b8;
+        --accent: #22d3ee;
+        --accent-2: #38bdf8;
+        --ring: rgba(56, 189, 248, 0.35);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "IBM Plex Sans", "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(1200px 500px at 20% -10%, rgba(56, 189, 248, 0.25), transparent 60%),
+          radial-gradient(1000px 600px at 120% 0%, rgba(34, 211, 238, 0.22), transparent 55%),
+          linear-gradient(160deg, var(--bg), var(--bg-2));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 48px 20px;
+      }
+
+      main {
+        width: min(720px, 100%);
+      }
+
+      header {
+        margin-bottom: 28px;
+      }
+
+      h1 {
+        font-weight: 600;
+        font-size: clamp(28px, 3vw, 36px);
+        letter-spacing: -0.02em;
+        margin: 0 0 8px;
+      }
+
+      p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      .link-grid {
+        display: grid;
+        gap: 14px;
+      }
+
+      .link-card {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 20px;
+        border-radius: 16px;
+        text-decoration: none;
+        color: inherit;
+        background: rgba(15, 23, 42, 0.7);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .link-card:hover,
+      .link-card:focus-visible {
+        transform: translateY(-2px);
+        border-color: rgba(56, 189, 248, 0.7);
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.35), 0 0 0 3px var(--ring);
+        outline: none;
+      }
+
+      .link-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .link-title {
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+      .link-subtitle {
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      .link-pill {
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--accent);
+        border: 1px solid rgba(34, 211, 238, 0.4);
+        padding: 6px 10px;
+        border-radius: 999px;
+      }
+
+      footer {
+        margin-top: 26px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Private Cloud</h1>
+        <p>Quick entry points for internal services.</p>
+      </header>
+
+      <section class="link-grid">
+        <a class="link-card" href='https://dockhand.{{env "DOMAIN"}}' rel="noopener">
+          <div class="link-meta">
+            <span class="link-title">Dockhand</span>
+            <span class="link-subtitle">Containers dashboard</span>
+          </div>
+          <span class="link-pill">Ops</span>
+        </a>
+
+        <a class="link-card" href='https://dev.resume.{{env "DOMAIN"}}' rel="noopener">
+          <div class="link-meta">
+            <span class="link-title">Resume (Dev)</span>
+            <span class="link-subtitle">Resume preview</span>
+          </div>
+          <span class="link-pill">Dev</span>
+        </a>
+
+        <a class="link-card" href='https://prod.resume.{{env "DOMAIN"}}' rel="noopener">
+          <div class="link-meta">
+            <span class="link-title">Resume (Prod)</span>
+            <span class="link-subtitle">Resume production</span>
+          </div>
+          <span class="link-pill">Prod</span>
+        </a>
+
+      <footer>
+        Tailscale-only access enforced for services.
+      </footer>
+    </main>
+  </body>
+</html>
