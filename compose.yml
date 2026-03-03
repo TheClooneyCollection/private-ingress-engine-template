@@ -42,6 +42,23 @@ services:
     network_mode: service:tailscale
     restart: unless-stopped
 
+  # Optional example: run Pi-hole as your rewrite DNS service.
+  pihole:
+    image: pihole/pihole:latest
+    environment:
+      FTLCONF_webserver_port: "8080"
+      FTLCONF_webserver_api_password: ${PIHOLE_WEB_PASSWORD}
+      FTLCONF_misc_dnsmasq_lines: "address=/${DOMAIN}/${PRIVATE_IP}"
+      FTLCONF_dns_rateLimit_count: 3000
+      FTLCONF_dns_rateLimit_interval: 60
+      TZ: ${TZ:-UTC}
+    volumes:
+      - ${PWD}/pihole/etc-pihole:/etc/pihole
+    cap_add:
+      - NET_ADMIN
+    network_mode: service:tailscale
+    restart: unless-stopped
+
 volumes:
   caddy_data:
   caddy_config:
