@@ -32,8 +32,8 @@ services:
       - CF_DNS_API_TOKEN
     volumes:
       - $PWD/conf:/etc/caddy
-      - caddy_data:/data
-      - caddy_config:/config
+      - $PWD/caddy/data:/data
+      - $PWD/caddy/config:/config
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:2019/config >/dev/null 2>&1"]
       interval: 30s
@@ -58,10 +58,6 @@ services:
       - NET_ADMIN
     network_mode: service:tailscale
     restart: unless-stopped
-
-volumes:
-  caddy_data:
-  caddy_config:
 
 networks:
   edge:
